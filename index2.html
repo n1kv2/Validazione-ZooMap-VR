@@ -489,6 +489,18 @@ tr:hover {
     }
   }
 
+  @media (max-width: 768px) {
+    .btn, .restartBtn {
+        padding: 15px;
+        font-size: 18px;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    .ball {
+        -webkit-tap-highlight-color: transparent;
+    }
+}
+
 </style>
 
 </head>
@@ -912,14 +924,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // resetta tutti gli elementi allo stato iniziale (item, tempo ecc)
     function init() {
-        elements.buttons.start.addEventListener('click', inizioTest);
-        elements.buttons.reset.addEventListener('click', resetCurrentTask);
-        elements.buttons.restart.addEventListener('click', restartTest);
-        elements.buttons.next.addEventListener('click', loadNextTask);
-        elements.buttons.menu.addEventListener('click', function() {
-    window.location.href = 'menu.html';
-});
-    }
+    elements.buttons.start.addEventListener('click', inizioTest);
+    elements.buttons.start.addEventListener('touchend', inizioTest); // Cell
+    
+    elements.buttons.reset.addEventListener('click', resetCurrentTask);
+    elements.buttons.reset.addEventListener('touchend', resetCurrentTask); // Cell
+    
+    elements.buttons.next.addEventListener('click', loadNextTask);
+    elements.buttons.next.addEventListener('touchend', loadNextTask); // Cell
+    
+    elements.buttons.menu.addEventListener('click', function() {
+        window.location.href = 'menu.html';
+    });
+    elements.buttons.menu.addEventListener('touchend', function() {
+        window.location.href = 'menu.html';
+    }); // Cell
+}
 
     function inizioTest() {
         switchScreen('intro', 'test');
