@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KBIT 2 Test</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap">
+    <style>
+        :root {
+            --primary: #4277fc;
+            --primary-light: #4895ef;
+            --error: #f72585;
+            --success: #4cc9f0;
+            --gray: #f8f9fa;
+            --gray-dark: #e9ecef;
+            --text: #212529;
+            --text-light: #6c757d;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0 6px 12px rgba(0, 0, 0, 0.1);
+            --radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f7ff;
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transform: translateY(0);
+            opacity: 1;
+            transition: var(--transition);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
+            background: var(--primary);
+            color: white;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-weight: 600;
+            font-size: 1.8rem;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-hover);
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+            color: var(--text);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--gray-dark);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        input[type="text"]:focus, input[type="number"]:focus {
+            border-color: var(--primary-light);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1rem;
+            font-weight: 500;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .btn:hover {
+            background: #4c9dff;
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .feedback {
+            padding: 15px;
+            display: none;
+            border-radius: var(--radius);
+            margin-top: 20px;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .feedback.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .correct {
+            background-color: rgba(76, 201, 240, 0.1);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .incorrect {
+            background-color: rgba(247, 37, 133, 0.1);
+            color: var(--error);
+            border: 1px solid var(--error);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 25px;
+            background: var(--gray);
+            padding: 15px;
+            border-radius: var(--radius);
+        }
+
+        .error-counter {
+            font-weight: 600;
+            color: var(--error);
+        }
+
+        .results {
+            text-align: center;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .results h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .score {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin: 20px 0;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .game-over {
+            color: var(--error);
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .feedback.correct, .feedback.incorrect {
+            display: block; 
+            animation: fadeIn 0.5s ease-out forwards;
+}
+
+        @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.correct {
+    animation: fadeIn 0.3s ease-out, pulse 0.5s ease-out;
+}
+
+.incorrect {
+    animation: fadeIn 0.3s ease-out;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>KBIT 2 Test</h1>
+        </div>
+        
+        <div class="content">
+            <div id="age-input-container" class="card fade-in">
+                <div class="question-text">Inserisci la tua età:</div>
+                <div class="input-group">
+                    <input type="number" id="age-input" min="14" max="90" >
+                </div>
+                <button id="start-btn" class="btn">Inizia il test</button>
+            </div>
+            
+            <div id="stats-container" class="stats hidden">
+                <div class="error-counter">Errori: <span id="error-count">0</span>/4</div>
+            </div>
+            
+            <div id="test-container" class="hidden">
+                <div class="card">
+                    <div class="question-text" id="question-text"></div>
+                    <div class="input-group">
+                        <input type="text" id="answer-input" placeholder="Scrivi la tua risposta..." autocomplete="off">
+                    </div>
+                    <button id="submit-btn" class="btn">Invia risposta</button>
+                    <div class="feedback" id="feedback"></div>
+                </div>
+            </div>
+            
+            <div id="results" class="results hidden">
+                <div class="card">
+                    <h2>Test Completato</h2>
+                    <div id="game-over-message" class="game-over"></div>
+                    <div>Domande totali: <span id="final-question">0</span></div>
+                    <div>Errori totali: <span id="final-errors">0</span></div>
+                    <div class="score">Punteggio: <span id="final-score">0</span></div>
+                    <button id="menu-btn" class="btn">Torna al Menu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        // Domande e risposte corrette
+const questions = [
+    { question: "14. Che cos'è quella cosa che ha porte e in cui tu dormi di notte?", answers: ["Stanza", "casa", "camera"] },
+    { question: "15. Che cosa ha bisogno di una cura giornaliera, è rosa e tiene i tuoi denti al loro posto?", answers: ["Gengiva", "Apparecchio", "Dentiera"] },
+    { question: "16. Che cosa ha una scrivania all'ingresso, stanza di lettura e file di libri?", answers: ["Biblioteca", "Libreria"] },
+    { question: "17. Che cos'è bianco, viene cosparso sul cibo e si trova nell'acqua del mare?", answers: ["sale"] },
+    { question: "18. Che cos'è fragile, è in coppia e qualche volta serve per leggere?", answers: ["Occhiali", "lenti"] },
+    { question: "19. Che cosa è fatto di caucciù, è solitamente bianco e corregge gli errori?", answers: ["Gomma"] },
+    { question: "20. Che cosa si scioglie, brucia ed è fatto di cera?", answers: ["Candela"] },
+    { question: "21. Che cosa ha diversi pulsanti, ha delle porte e viaggia su e giù?", answers: ["Ascensore", "aereo", "astronave", "elicottero", "treno"] },
+    { question: "22. che cosa è fatto di metallo, è diverso per i mancini ed è usato dai barbieri?", answers: ["Forbici"] },
+    { question: "23. Che cosa va intorno alla vita, non ha maniche e si indossa per cucinare?", answers: ["Grembiule", "sinale"] },
+    { question: "24. Che cosa ha pulsanti, può essere tenuto in mano e può risolvere problemi di matematica?", answers: ["calcolatrice", "computer", "telefono", "tablet", "smartphone", "cellulare"] },
+    { question: "25. Che cosa permette di vederci attraverso, ha un davanzale ed è costruito nei muri?", answers: ["finestra", "porta finestra"] },
+    { question: "26. Che cosa viaggia a lunghe distanze, fischia e trasporta persone e merci?", answers: ["treno", "traghetto", "barca", "nave"] },
+    { question: "27. Che cosa è bianco nella parte superiore, ha una superficie liscia, e cresce in cinque punti di ciascuna mano?", answers: ["unghia", "unghie"] },
+    { question: "28. Che cosa può essere attraversato a piedi o guidando, si trova sull'acqua e di solito unisce due parti di terra?", answers: ["ponte", "istmo"] },
+    { question: "29. Che cosa è fatto di disegni, si vede in TV e qualche volta fa ridere le persone?", answers: ["Cartoni", "Animazione", "cartoni animati"] },
+    { question: "30. Che cosa è marrone, si fa dai chicchi e spesso si trova in barrette dolci?", answers: ["Cioccolato", "Cacao", "Soia", "Vaniglia", "caffè", "caffe", "Carruba"] },
+    { question: "31. Che cos'è più antico dei libri, contiene degli scritti ed è arrotolato?", answers: ["Pergamena", "Papiro", "Scritture", "Scritture sacre"] },
+    { question: "32. Che cosa è disegnato o scritto, si vede sui muri o sugli edifici e non è ben accettato?", answers: ["Graffito", "Murales"] },
+    { question: "33. Che cos'è a punta, si trova sulla sabbia e contiene le mummie?", answers: ["Piramide"] },
+    { question: "34. Che cosa qualche volta si trova nelle liste, crea una pausa e non è mai alla fine delle frasi?", answers: ["Virgola", "punto e virgola", "due punti"] },
+    { question: "35. Chi finge di essere un'altra persona, è osservato e ha un copione?", answers: ["Attore", "attrice", "Imitatore", "Comparsa", "Controfigura"] },
+    { question: "36. Che cos'è un tipo di quadro che è dipinto e rappresenta una persona?", answers: ["Ritratto", "Caricatura", "Profilo", "Autoritratto"] },
+    { question: "37. Che cosa è fatto di carta, ha una parte adesiva e contiene qualcosa?", answers: ["Busta"] },
+    { question: "38. Che cos'è reale, non parla dell'autore, e racconta di una storia di vita", answers: ["Biografia"] },
+    { question: "39. Che cosa viene chiamato come una lettera, è necessario per il nostro corpo e si trova nel cibo?", answers: ["Vitamina"] },
+    { question: "40. Che cosa si mette al collo, può essere elettrica e di solito ha 6 corde?", answers: ["Chitarra"] },
+    { question: "41. Che cosa si vede a teatro, richiede un biglietto e succede solo durante il giorno?", answers: ["Matinee", "Pomeridiano"] },
+    { question: "42. A seguito di un abbaglio evidente, che cosa si dice o scrive di solito una persona onesta?", answers: ["Scusa", "Confessione", "Ritrattazione", "Preghiera", "perdono"] },
+    { question: "43. Che cosa è parte di un libro, ha un numero, e non si dovrebbe trovare in una storia breve?", answers: ["Capitolo", "nota"] },
+    { question: "44. Che cosa proviene dal pensiero, descrive qualcosa di originale e qualche volta risolve un problema?", answers: ["Idea", "Soluzione", "ipotesi", "invenzione", "Intuizione"] },
+    { question: "45. Che cos'è cercato dai collezionisti, identifica una persona e a volte è scritto su oggetti non comuni?", answers: ["Autografo", "Firma"] },
+    { question: "46. Che cosa è fatto di carta, definisce una preferenza ed è utilizzato per determinare il vincitore?", answers: ["Voto", "Scheda elettorale", "scheda di valutazione", "scheda valutativa"] },
+    { question: "47. Che cos'è quella cosa che gli artisti fanno davanti a un piccolo pubblico e che ha come risultato una selezione?", answers: ["Audizione", "provino"] },
+    { question: "48. Che cosa appartiene a una persona, a un luogo o una cosa, è informale e di solito ha un valore affettivo?", answers: ["Soprannome", "Nickname"] },
+];
+
+// Variabili di stato
+let currentQuestion = 0;
+let errorCount = 0;
+let consecutiveErrors = 0;
+let testCompleted = false;
+let startingQuestion = 0;
+
+// Elementi DOM
+const ageInputContainer = document.getElementById('age-input-container');
+const ageInput = document.getElementById('age-input');
+const startBtn = document.getElementById('start-btn');
+const statsContainer = document.getElementById('stats-container');
+const questionText = document.getElementById('question-text');
+const answerInput = document.getElementById('answer-input');
+const submitBtn = document.getElementById('submit-btn');
+const feedback = document.getElementById('feedback');
+const errorCountSpan = document.getElementById('error-count');
+const testContainer = document.getElementById('test-container');
+const resultsContainer = document.getElementById('results');
+const finalQuestionSpan = document.getElementById('final-question');
+const finalErrorsSpan = document.getElementById('final-errors');
+const finalScoreSpan = document.getElementById('final-score');
+const gameOverMessage = document.getElementById('game-over-message');
+const menuBtn = document.getElementById('menu-btn');
+
+// in base all'età
+function getStartingQuestion(age) {
+    if ((age >= 14 && age <= 21) || (age >= 66 && age <= 90)) {
+        return 0; // Inizia dalla domanda 14 (indice 0)
+    } else if (age >= 22 && age <= 65) {
+        return 6; // Inizia dalla domanda 20 (indice 6)
+    }
+    return 0; 
+}
+
+// Inizializza il test
+function initTest() {
+    ageInputContainer.style.display = 'block';
+    statsContainer.style.display = 'none';
+    testContainer.style.display = 'none';
+    resultsContainer.style.display = 'none';
+}
+
+
+function startTest() {
+    const age = parseInt(ageInput.value);
+    
+    if (isNaN(age)) {
+        alert("Inserisci un'età valida per iniziare il test");
+        return;
+    }
+    
+    if (age < 14 || age > 90) {
+        alert("L'età deve essere compresa tra 14 e 90 anni");
+        return;
+    }
+    
+    startingQuestion = getStartingQuestion(age); 
+    currentQuestion = startingQuestion;
+    errorCount = 0;
+    consecutiveErrors = 0;
+    testCompleted = false;
+    
+    errorCountSpan.textContent = consecutiveErrors;
+    
+    ageInputContainer.style.display = 'none';
+    statsContainer.style.display = 'flex';
+    testContainer.style.display = 'block';
+    resultsContainer.style.display = 'none';
+    
+    showQuestion();
+}
+
+function showQuestion() {
+    if (currentQuestion >= questions.length || consecutiveErrors >= 4) {
+        endTest();
+        return;
+    }
+    
+    questionText.textContent = questions[currentQuestion].question;
+    answerInput.value = '';
+    feedback.style.display = 'none';
+    answerInput.focus();
+}
+
+
+function checkAnswer() {
+    const userAnswer = answerInput.value.trim().toLowerCase();
+    const correctAnswers = questions[currentQuestion].answers.map(a => a.toLowerCase());
+    
+
+    submitBtn.disabled = true;
+    answerInput.disabled = true;
+
+    if (correctAnswers.includes(userAnswer)) {
+    
+        feedback.textContent = "✔ Corretto!";
+        feedback.className = "feedback correct";
+        feedback.style.display = 'block';
+        consecutiveErrors = 0;
+        errorCountSpan.textContent = consecutiveErrors;
+    } else {
+
+        feedback.textContent = "✖ Sbagliato. Le risposte corrette erano: " + questions[currentQuestion].answers.join(", ");
+        feedback.className = "feedback incorrect";
+        feedback.style.display = 'block';
+        errorCount++;
+        consecutiveErrors++;
+        errorCountSpan.textContent = consecutiveErrors;
+    }
+
+
+    setTimeout(() => {
+        currentQuestion++;
+        
+        if (currentQuestion >= questions.length || consecutiveErrors >= 4) {
+            endTest();
+        } else {
+          
+            feedback.style.display = 'none';
+            submitBtn.disabled = false;
+            answerInput.disabled = false;
+            answerInput.value = '';
+            showQuestion();
+        }
+    }, 2000); //  2 secondi
+}
+
+// Termina il test
+function endTest() {
+    testCompleted = true;
+    testContainer.style.display = 'none';
+    resultsContainer.style.display = 'block';
+
+    
+    const baseQuestion = startingQuestion === 0 ? 14 : 20;
+    
+
+    let lastAnsweredQuestion = baseQuestion + (currentQuestion - startingQuestion - 1);
+    
+
+    if (consecutiveErrors >= 4) {
+        lastAnsweredQuestion = baseQuestion + (currentQuestion - startingQuestion - 1);
+    }
+    
+
+    const score = lastAnsweredQuestion - errorCount;
+
+    
+    const results = {
+        score: score > 0 ? score : 0,
+        questionsAnswered: lastAnsweredQuestion,
+        errors: errorCount
+    };
+    localStorage.setItem('kbit2Results', JSON.stringify(results));
+    
+    //stato del test nel menu
+    const progress = JSON.parse(localStorage.getItem('testProgress'));
+    progress.kbit2 = true;
+    localStorage.setItem('testProgress', JSON.stringify(progress));
+    
+
+    finalQuestionSpan.textContent = lastAnsweredQuestion;
+    finalErrorsSpan.textContent = errorCount;
+    finalScoreSpan.textContent = score > 0 ? score : 0;
+    
+    if (consecutiveErrors >= 4) {
+        gameOverMessage.textContent = "Test terminato per troppi errori consecutivi.";
+    } else {
+        gameOverMessage.textContent = "Hai completato tutte le domande!";
+    }
+}
+
+
+// Torna al menu
+function goToMenu() {
+    window.location.href = 'menu.html';
+}
+
+
+startBtn.addEventListener('click', startTest);
+submitBtn.addEventListener('click', checkAnswer);
+answerInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        checkAnswer();
+    }
+});
+menuBtn.addEventListener('click', goToMenu);
+
+// Avvia l'inizializzazione
+initTest();
+
+    </script>
+</body>
+</html>

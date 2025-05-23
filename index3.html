@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trail Making Test</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --success: #2ecc71;
+            --background: #f5f6fa;
+            --text: #2c3e50;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background: var(--background);
+            color: var(--text);
+        }
+
+        #lowBody {
+            background-color: #f0f7fd;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+
+        .screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: left;
+            max-width: 600px;
+            width: 90%;
+            padding-bottom: 2rem;
+        }
+
+        .btn-complete {
+            background: #17c13f !important;
+        }
+
+        .btn-complete:hover {
+            background: #28d350 !important;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px #28d350;
+        }
+
+        .btn-main, .btn-option {
+            flex: 1;
+            min-width: 0; 
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 12px 5px !important;
+            box-sizing: border-box;
+        }
+
+        .test-options {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: space-between;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn-option {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 10px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-option:hover {
+            background: #34495e;
+        }
+
+        .btn-option-ex {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-option-ex:hover {
+            background: #43a1e0;
+        }
+
+        #testContainer {
+            position: relative;
+            width: 800px;
+            height: 600px;
+            margin: 20px auto;
+        }
+
+        #lineCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .circle {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s;
+            z-index: 2;
+            font-size: 1.2em;
+        }
+
+        .circle:hover {
+            transform: scale(1.1);
+        }
+
+        .number {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .letter {
+            background: #27ae60;
+            color: white;
+        }
+
+        .correct {
+            background: #f1c40f !important;
+            cursor: default;
+        }
+
+        .test-header {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .info-box {
+            background: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            font-size: 1.1rem;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .info-box.error {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-conf-tot {
+            background: #17c13f;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .btn-conf-tot:hover {
+            background: #28d350 ;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px #28d350;
+        }
+
+        .btn-exit {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .result-card {
+            max-width: 700px;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 2rem 0;
+        }
+
+        .result-box {
+            background: var(--background);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .result-box.total {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .result-box.difference {
+            background: #9b59b6;
+            color: white;
+            grid-column: 1 / -1;
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .btn-main-final {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 10px;
+        }
+
+        .btn-main-final:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 219, 69, 0);
+        }
+
+        .btn-retry {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 10px;
+        }
+
+        .btn-retry:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(219, 96, 52, 0);
+        }
+
+        input#subject-code {
+            padding: 12px;
+            margin: 15px 0;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            width: 200px;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        @keyframes wrong {
+            0% { transform: scale(1); }
+            30% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .wrong {
+            animation: wrong 0.4s ease-in-out;
+            background: var(--accent) !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Schermata Home -->
+    <div id="home" class="screen">
+        <div class="card">
+            <h1>Trail Making Test</h1>
+            <p>Questo test valuta le funzioni esecutive, vari aspetti dell'attenzione, tracking visuo-motorio e visuo-concettuale.</p>
+            
+            <div id="lowBody">
+                <h2>Come funziona</h2>
+                <p>Il test è composto da TMT A e TMT B <br> (si consiglia di usare un monitor)</p>
+
+                <p>TMT A</p>
+                <ul>
+                    <li>Esplorazione visuo-spaziale: <br> <b>Unisci in ordine crescente una serie di numeri da 1 a 25 disposti casualmente su un foglio.</b></li>
+                </ul>
+
+                <p>TMT B</p>
+                <ul>
+                    <li>Attenzione alternata: <br> <b>Unisci alternativamente numeri e lettere. Collega 1 ad A, 2 a B e così via</b> </li>
+                </ul>
+                <div style="text-align: center;"> 
+                    <button class="btn-option-ex" onclick="startTest('SIMPLE')">Test Esempio</button>
+                </div>
+            </div>
+            
+            <div class="test-options">
+                <button class="btn-option btn-complete" onclick="startCompleteTest()">
+                    TMT COMPLETO
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Area Test -->
+    <div id="test-screen" class="screen hidden">
+        <div class="test-header">
+            <div class="info-box">
+                <span>⏱ Tempo:</span>
+                <span id="timer">00:00</span>
+            </div>
+            <div class="info-box error">
+                <span>❌ Errori:</span>
+                <span id="errorCount">0</span>
+            </div>
+            <button class="btn-exit" onclick="resetTest()">Esci</button>
+        </div>
+        <div id="testContainer">
+            <canvas id="lineCanvas"></canvas>
+        </div>
+    </div>
+
+    <!-- Risultati -->
+    <div id="results" class="screen hidden">
+        <div class="card result-card">
+            <h2>Risultati del partecipante: <span id="result-code"></span></h2>
+            <div class="result-grid">
+                <div class="result-box">
+                    <h3>Parte A</h3>
+                    <p>Tempo: <span id="timeA">0</span>s</p>
+                    <p>Errori: <span id="errorsA">0</span></p>
+                </div>
+                <div class="result-box">
+                    <h3>Parte B</h3>
+                    <p>Tempo: <span id="timeB">0</span>s</p>
+                    <p>Errori: <span id="errorsB">0</span></p>
+                </div>
+                <div class="result-box total">
+                    <h3>Totale</h3>
+                    <p>Tempo: <span id="totalTime">0</span>s</p>
+                    <p>Errori: <span id="totalErrors">0</span></p>
+                </div>
+                <div class="result-box difference">
+                    <h3>Differenza (B - A)</h3>
+                    <p>Tempo: <span id="timeDifference">0</span>s</p>
+                </div>
+            </div>
+            <div class="result-actions">
+                <button class="btn-main-final" onclick="showScreen('home')">Vai al TMT completo</button>
+                <button class="btn-main-final" onclick="window.location.href='menu.html'">Torna al MENU'</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Schermata fine test esempio -->
+    <div id="example-complete" class="screen hidden">
+        <div class="card">
+            <h2>Test Esempio Completato</h2>
+            <p>Hai completato correttamente il test esempio.</p>
+            <p>Ora puoi procedere con il test completo.</p>
+            <div class="result-actions">
+                <button class="btn-main-final" onclick="startCompleteTest()">Inizia TMT Completo</button>
+                <button class="btn-main-final" onclick="showScreen('home')">Torna alla Home</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Verifica autenticazione
+        if(!localStorage.getItem('authenticated') && window.location.pathname !== '/index.html') {
+            window.location.href = 'index.html';
+        }
+
+        let currentTest = null;       
+        let currentPhase = 'A';       
+        let startTime = null;         
+        let currentStep = 0;          
+        let errors = 0;               
+        let sequence = [];            
+        let positions = [];           
+        let timerInterval = null;     
+        let subjectCode = "";         
+        let isCompleteTest = false;   
+        let isExampleTest = false;    // Nuova variabile per identificare il test esempio
+        const results = {             
+            A: { time: 0, errors: 0 }, 
+            B: { time: 0, errors: 0 }
+        };
+        const canvas = document.getElementById('lineCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // FUNZIONI BASE 
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+            document.getElementById(screenId).classList.remove('hidden');
+        }
+
+        function resetTest() {
+            clearInterval(timerInterval);
+            showScreen('home');
+            results.A = { time: 0, errors: 0 };
+            results.B = { time: 0, errors: 0 };
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // AVVIO TEST
+        function startTest(testType) {
+            currentTest = testType;
+            isCompleteTest = false;
+            isExampleTest = true;  // Impostiamo che è un test esempio
+            initializeTest();
+        }
+
+        function startCompleteTest() {
+            isCompleteTest = true;
+            isExampleTest = false; // Non è un test esempio
+            currentPhase = 'A';
+            currentTest = 'A';
+            initializeTest();
+        }
+
+        // INIZIALIZZAZIONE TEST
+        function initializeTest() {
+            showScreen('test-screen');
+            setupCanvas();
+            resetTestState();
+            createCircles();
+            startTimer();
+        }
+
+        function resetTestState() {
+            currentStep = 0;
+            errors = 0;
+            positions = [];
+            sequence = generateSequence();
+            document.getElementById('testContainer').innerHTML = '';
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            document.getElementById('errorCount').textContent = '0';
+        }
+
+        function generateSequence() {
+            if(isCompleteTest) {
+                return currentPhase === 'A' ? 
+                    Array.from({length: 25}, (_, i) => i + 1) :
+                    Array.from({length: 26}, (_, i) => 
+                        i % 2 ? String.fromCharCode(65 + (i-1)/2) : (i/2 + 1)
+                    );
+            }
+            if(currentTest === 'SIMPLE') {
+                return currentPhase === 'A' ? 
+                    [1, 2, 3, 4] : 
+                    [1, 'A', 2, 'B'];
+            }
+            if(currentTest === 'A') return Array.from({length: 25}, (_, i) => i + 1);
+            if(currentTest === 'B') return Array.from({length: 26}, (_, i) => 
+                i % 2 ? String.fromCharCode(65 + (i-1)/2) : (i/2 + 1)
+            );
+            return [];
+        }
+
+        // GESTIONE ELEMENTI 
+        function setupCanvas() {
+            canvas.width = 800;
+            canvas.height = 600;
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = '#e74c3c';
+            ctx.fillStyle = '#e74c3c'; 
+            ctx.lineJoin = 'round';
+            ctx.lineCap = 'round';
+        }
+
+        function createCircles() {
+            sequence.forEach(value => {
+                const circle = document.createElement('div');
+                circle.className = `circle ${typeof value === 'number' ? 'number' : 'letter'}`;
+                circle.textContent = value;
+                
+                const pos = getValidPosition();
+                circle.style.left = `${pos.x}px`;
+                circle.style.top = `${pos.y}px`;
+                
+                circle.addEventListener('click', () => handleClick(value, circle, pos));
+                document.getElementById('testContainer').appendChild(circle);
+                positions.push(pos);
+            });
+        }
+
+        function getValidPosition() {
+            let pos;
+            let isValid = false;
+            
+            do {
+                pos = {
+                    x: Math.random() * (canvas.width - 40), 
+                    y: Math.random() * (canvas.height - 40)
+                };
+                
+                isValid = positions.every(existing => {
+                    return Math.hypot(existing.x - pos.x, existing.y - pos.y) > 80;
+                });
+            } while(!isValid);
+            
+            return pos;
+        }
+
+        // LOGICA DI GIOCO 
+        function handleClick(value, element, pos) {
+            const expected = sequence[currentStep];
+            
+            if(value === expected) {
+                element.classList.add('correct');
+                drawLine(pos);
+                currentStep++;
+                
+                if(currentStep === sequence.length) finishPhase();
+            } else {
+                errors++;
+                document.getElementById('errorCount').textContent = errors;
+                element.classList.add('wrong');
+                setTimeout(() => element.classList.remove('wrong'), 500);
+            }
+        }
+
+        function drawLine(pos) {
+            if(currentStep > 0) {
+                const prevPos = positions[currentStep - 1];
+                ctx.beginPath();
+                ctx.moveTo(prevPos.x + 20, prevPos.y + 20);
+                ctx.lineTo(pos.x + 20, pos.y + 20);
+                ctx.stroke();
+            }
+            
+            ctx.beginPath();
+            ctx.arc(pos.x + 20, pos.y + 20, 3, 0, Math.PI*2);
+            ctx.fill();
+        }
+
+        // FINE TEST 
+        function finishPhase() {
+            const time = (Date.now() - startTime) / 1000;
+            
+            if(isExampleTest) {
+                // Se è un test esempio, mostra solo la schermata di completamento
+                results[currentPhase] = { time, errors };
+                
+                if(currentPhase === 'A') {
+                    currentPhase = 'B';
+                    initializeTest();
+                } else {
+                    showScreen('example-complete');
+                }
+            } 
+            else if(isCompleteTest) {
+                // Se è il test completo, salva i risultati
+                results[currentPhase] = { time, errors };
+                
+                if(currentPhase === 'A') {
+                    currentPhase = 'B';
+                    currentTest = 'B';
+                    initializeTest();
+                } else {
+                    saveResults();
+                    showResults();
+                }
+            } 
+            else {
+                // Per altri test (non usato attualmente)
+                results[currentPhase] = { time, errors };
+                showResults();
+            }
+        }
+
+        function saveResults() {
+            const timeA = results.A.time.toFixed(1);
+            const timeB = results.B.time.toFixed(1);
+            const totalTime = (results.A.time + results.B.time).toFixed(1);
+            const timeDifference = (results.B.time - results.A.time).toFixed(1);
+            const totalErrors = results.A.errors + results.B.errors;
+
+            // Salva i risultati solo se non è un test esempio
+            if(!isExampleTest) {
+                const resultsData = {
+                    timeA: timeA,
+                    timeB: timeB,
+                    totalTime: totalTime,
+                    timeDifference: timeDifference,
+                    totalErrors: totalErrors,
+                    errorsA: results.A.errors,
+                    errorsB: results.B.errors
+                };
+                localStorage.setItem('trialMakingResults', JSON.stringify(resultsData));
+                
+                // Aggiorna lo stato del test nel menu
+                const progress = JSON.parse(localStorage.getItem('testProgress'));
+                progress.trialMaking = true;
+                localStorage.setItem('testProgress', JSON.stringify(progress));
+            }
+        }
+
+        function showResults() {
+            showScreen('results');
+            document.getElementById('result-code').textContent = "Risultati Test";
+            
+            const timeA = results.A.time.toFixed(1);
+            const timeB = results.B.time.toFixed(1);
+            const totalTime = (results.A.time + results.B.time).toFixed(1);
+            const timeDifference = (results.B.time - results.A.time).toFixed(1);
+            const totalErrors = results.A.errors + results.B.errors;
+
+            document.getElementById('timeA').textContent = timeA;
+            document.getElementById('errorsA').textContent = results.A.errors;
+            document.getElementById('timeB').textContent = timeB;
+            document.getElementById('errorsB').textContent = results.B.errors;
+            document.getElementById('totalTime').textContent = totalTime;
+            document.getElementById('totalErrors').textContent = totalErrors;
+            document.getElementById('timeDifference').textContent = timeDifference;
+        }
+
+        // TIMER 
+        function startTimer() {
+            startTime = Date.now();
+            timerInterval = setInterval(() => {
+                const time = Math.floor((Date.now() - startTime) / 1000);
+                document.getElementById('timer').textContent = 
+                    `${String(Math.floor(time / 60)).padStart(2, '0')}:${String(time % 60).padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        // RIPROVA TEST 
+        function retryTest() {
+            if(isCompleteTest) startCompleteTest();
+            else startTest(currentTest);
+        }
+    </script>
+</body>
+</html>

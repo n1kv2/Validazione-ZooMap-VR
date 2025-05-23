@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valutazione VR</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 2.5rem;
+            border: 1px solid #eaeaea;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .description {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 2.5rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #eee;
+            line-height: 1.8;
+        }
+        
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 1.5rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background-color: #4a6fa5;
+        }
+        
+        .btn-primary:hover {
+            background-color: #3a5a8a;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-secondary {
+            background-color: #42b72a;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #36a420;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            
+            .container {
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .buttons-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Valutazione VR</h1>
+        <div class="description">
+            <p>Completa i questionari SUS, PQ e SSQ per valutare la tua esperienza con la realtà virtuale.</p>
+        </div>
+        <div class="buttons-container">
+            <button class="btn btn-primary" onclick="startValutazioneVR()">Accedi al Test</button>
+            <a href="menu.html" class="btn btn-secondary">Torna al Menu</a>
+        </div>
+    </div>
+
+    <script>
+        // Verifica autenticazione
+        if(!localStorage.getItem('authenticated')) {
+            window.location.href = 'index.html';
+        }
+
+        function startValutazioneVR() {
+           
+            const progress = JSON.parse(localStorage.getItem('testProgress'));
+            progress.valutazioneVR = true;
+            localStorage.setItem('testProgress', JSON.stringify(progress));
+            
+            
+            window.open('https://forms.gle/G2iR5rZzMftg2bTR8', '_blank');
+            
+            
+            setTimeout(() => {
+                window.location.href = 'menu.html';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

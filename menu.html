@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selezione Test</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .test-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .test-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .test-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+        }
+
+        button {
+            background-color: #1877f2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .signNV {
+            color: rgb(0, 0, 0);
+        }
+
+
+        .progress-container {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+       
+
+        .progress-bar-container {
+            margin: 1.5rem 0;
+        }
+
+        .progress-bar {
+            height: 16px;
+            background: #e9ecef;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #2E7D32);
+            width: 0%;
+            transition: width 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+            position: relative;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .test-status {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+
+        .progress-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 1rem;
+        }
+
+        .results-btn {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+        }
+
+        .reset-btn {
+            background: linear-gradient(135deg, #f44336, #d32f2f);
+        }
+
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+            overflow: hidden;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 16px;
+            width: 85%;
+            max-width: 700px;
+            max-height: 80vh;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .modal-body {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+
+        .result-item {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .result-item h3 {
+            color: #1877f2;
+            margin-bottom: 10px;
+        }
+
+        .result-item p {
+            margin: 8px 0;
+            line-height: 1.5;
+        }
+
+       
+        .modal-body::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .modal-body::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .modal-body::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+
+        .modal-body::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Seleziona Test</h1>
+        <div class="button-group">
+            <button onclick="showResults()" class="results-btn">Risultati</button>
+            <button onclick="logout()">Esci</button>
+        </div>
+    </div>
+
+    <div class="progress-container">
+        <div class="progress-header">
+            <h3>Progresso Test</h3>
+            <div class="test-status" id="test-status"></div>
+        </div>
+        
+        <div class="progress-bar-container">
+            <div class="progress-bar">
+                <div class="progress" id="progress-bar"></div>
+            </div>
+        </div>
+        
+        <div class="progress-actions">
+            <button onclick="resetProgress()" class="reset-btn">Reset Progresso</button>
+        </div>
+    </div>
+
+    <div class="test-container">
+        <div class="test-card" onclick="window.location.href='index6.html'">
+            <h3>1. Questionari</h3>
+            <p>Anamnesi e consenso informato</p>
+        </div>
+
+        <div class="test-card" onclick="window.location.href='index7.html'">
+            <h3>2. Valutazione VR</h3>
+            <p>SUS - PQ - SSQ</p>
+        </div>
+
+        <div class="test-card" onclick="window.location.href='index2.html'">
+            <h3>3. Torre di Londra</h3>
+            <p>Test di pianificazione cognitiva</p>
+        </div>
+
+        <div class="test-card" onclick="window.location.href='index3.html'">
+            <h3>4. Trial Making Test</h3>
+            <p>Test di velocità cognitiva</p>
+        </div>
+
+        <div class="test-card" onclick="window.location.href='index1.html'">
+            <h3>5. Digit Span Test</h3>
+            <p>Test di memoria a breve termine</p>
+        </div>
+
+        <div class="test-card" onclick="window.location.href='index5.html'">
+            <h3>6. KBIT 2</h3>
+            <p>Test di intelligenza verbale e non verbale</p>
+        </div>
+
+    </div>
+
+    <div class="signNV" style="font-family: 'Courier New', Courier, monospace;">
+        <h5>NikV</h5>
+    </div>
+
+    <!-- risultati -->
+    <div id="resultsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Risultati dei Test</h2>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body" id="resultsContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // Verifica autenticazione
+        if(!localStorage.getItem('authenticated')) {
+            window.location.href = 'index.html';
+        }
+
+        
+        if(!localStorage.getItem('testProgress')) {
+            const initialProgress = {
+                questionari: false,
+                valutazioneVR: false,
+                torreLondra: false,
+                trialMaking: false,
+                digitSpan: false,
+                kbit2: false
+            };
+            localStorage.setItem('testProgress', JSON.stringify(initialProgress));
+        }
+
+        
+        updateProgressUI();
+
+        function logout() {
+            localStorage.removeItem('authenticated');
+            window.location.href = 'index.html';
+        }
+
+        function showResults() {
+            const modal = document.getElementById('resultsModal');
+            const resultsContent = document.getElementById('resultsContent');
+            
+            
+            const results = {
+                torreLondra: JSON.parse(localStorage.getItem('torreLondraResults')) || null,
+                trialMaking: JSON.parse(localStorage.getItem('trialMakingResults')) || null,
+                digitSpan: JSON.parse(localStorage.getItem('digitSpanResults')) || null,
+                kbit2: JSON.parse(localStorage.getItem('kbit2Results')) || null
+            };
+
+            let html = '';
+            
+            
+            if(results.torreLondra) {
+                html += `
+                <div class="result-item">
+                    <h3>Torre di Londra</h3>
+                    <p><strong>Tempo decisione:</strong> ${results.torreLondra.totalExec} secondi</p>
+                    <p><strong>Tempo esecuzione:</strong> ${results.torreLondra.totalTime} secondi</p>
+                    <p><strong>Item completati:</strong> ${results.torreLondra.completedItems}/16</p>
+                </div>`;
+            }
+
+            // Trail Making Test
+            if(results.trialMaking) {
+                html += `
+                <div class="result-item">
+                    <h3>Trail Making Test</h3>
+                    <p><strong>Parte A:</strong> ${results.trialMaking.timeA} secondi</p>
+                    <p><strong>Parte B:</strong> ${results.trialMaking.timeB} secondi</p>
+                    <p><strong>Differenza (B-A):</strong> ${results.trialMaking.timeDifference} secondi</p>
+                </div>`;
+            }
+
+            // Digit Span Test
+            if(results.digitSpan) {
+                html += `
+                <div class="result-item">
+                    <h3>Digit Span Test</h3>
+                    <p><strong>Cifre ricordate:</strong> ${results.digitSpan.score}</p>
+                </div>`;
+            }
+
+            
+            if(results.kbit2) {
+                html += `
+                <div class="result-item">
+                    <h3>KBIT 2</h3>
+                    <p><strong>Punteggio:</strong> ${results.kbit2.score}</p>
+                    <p><strong>Domande totali:</strong> ${results.kbit2.questionsAnswered}</p>
+                </div>`;
+            }
+
+            if(html === '') {
+                html = '<p style="text-align: center; color: #6c757d; margin: 2rem 0;">Nessun risultato disponibile. Completa i test per vedere i risultati.</p>';
+            }
+
+            resultsContent.innerHTML = html;
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden'; 
+        }
+
+        function closeModal() {
+            document.getElementById('resultsModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function updateProgressUI() {
+            const progress = JSON.parse(localStorage.getItem('testProgress'));
+            const totalTests = 6;
+            let completedTests = 0;
+            
+            
+            for(const test in progress) {
+                if(progress[test]) completedTests++;
+            }
+            
+            
+            const progressPercentage = (completedTests / totalTests) * 100;
+            document.getElementById('progress-bar').style.width = `${progressPercentage}%`;
+            
+            // Aggiorna lo stato dei test
+            const testStatus = document.getElementById('test-status');
+            testStatus.innerHTML = `
+                <span>${completedTests} di ${totalTests} completati</span>
+                <span style="font-weight: bold; color: #2E7D32;">${Math.round(progressPercentage)}%</span>
+            `;
+        }
+
+        function resetProgress() {
+            if(confirm("Sei sicuro di voler resettare tutti i progressi e i risultati?")) {
+            
+                const initialProgress = {
+                    questionari: false,
+                    valutazioneVR: false,
+                    torreLondra: false,
+                    trialMaking: false,
+                    digitSpan: false,
+                    kbit2: false
+                };
+                localStorage.setItem('testProgress', JSON.stringify(initialProgress));
+                
+                // Resetta i risultati
+                localStorage.removeItem('torreLondraResults');
+                localStorage.removeItem('trialMakingResults');
+                localStorage.removeItem('digitSpanResults');
+                localStorage.removeItem('kbit2Results');
+                
+                
+                updateProgressUI();
+                alert("Progresso e risultati resettati con successo!");
+            }
+        }
+
+        
+        window.onclick = function(event) {
+            const modal = document.getElementById('resultsModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>
+
+<!--nik-->
