@@ -412,7 +412,7 @@
         let timerInterval = null;     
         let subjectCode = "";         
         let isCompleteTest = false;   
-        let isExampleTest = false;    // Nuova variabile per identificare il test esempio
+        let isExampleTest = false;    
         const results = {             
             A: { time: 0, errors: 0 }, 
             B: { time: 0, errors: 0 }
@@ -438,13 +438,13 @@
         function startTest(testType) {
             currentTest = testType;
             isCompleteTest = false;
-            isExampleTest = true;  // Impostiamo che è un test esempio
+            isExampleTest = true;  
             initializeTest();
         }
 
         function startCompleteTest() {
             isCompleteTest = true;
-            isExampleTest = false; // Non è un test esempio
+            isExampleTest = false; 
             currentPhase = 'A';
             currentTest = 'A';
             initializeTest();
@@ -571,7 +571,7 @@
             const time = (Date.now() - startTime) / 1000;
             
             if(isExampleTest) {
-                // Se è un test esempio, mostra solo la schermata di completamento
+                // Se test esempio, mostra solo la schermata di completamento
                 results[currentPhase] = { time, errors };
                 
                 if(currentPhase === 'A') {
