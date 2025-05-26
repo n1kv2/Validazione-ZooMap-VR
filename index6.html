@@ -120,26 +120,38 @@
         </div>
     </div>
 
-    <script>
-        // Verifica autenticazione
-        if(!localStorage.getItem('authenticated')) {
-            window.location.href = 'index.html';
-        }
+<script>
+    // Verifica autenticazione
+    if(!localStorage.getItem('authenticated')) {
+        window.location.href = 'index.html';
+    }
 
-        function startQuestionari() {
+    function startQuestionari() {
+        
+        const progress = JSON.parse(localStorage.getItem('testProgress'));
+        progress.questionari = true;
+        localStorage.setItem('testProgress', JSON.stringify(progress));
+        
+        
+        const newWindow = window.open('https://forms.gle/C1exKGxnosrbhw1Z7', '_blank');
+        
+        
+        if (newWindow) {
             
-            const progress = JSON.parse(localStorage.getItem('testProgress'));
-            progress.questionari = true;
-            localStorage.setItem('testProgress', JSON.stringify(progress));
-            
-           
-            window.open('https://forms.gle/C1exKGxnosrbhw1Z7', '_blank');
-            
-            
-            setTimeout(() => {
-                window.location.href = 'menu.html';
-            }, 1000);
+            if (!/Mobi|Android|iPad|iPhone/i.test(navigator.userAgent)) {
+                // dopo 1 secondo
+                setTimeout(() => {
+                    window.location.href = 'menu.html';
+                }, 1000);
+            }
+        } else {
+     
+            alert('Il browser ha bloccato l\'apertura del questionario. Per favore, consenti i popup e riprova.');
         }
-    </script>
+    }
+</script>
+    
 </body>
 </html>
+
+<!--nik-->
