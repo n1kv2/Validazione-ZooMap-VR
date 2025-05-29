@@ -485,7 +485,7 @@ function speakSequence(sequence) {
     sequence.forEach((num, index) => {
         const utterance = new SpeechSynthesisUtterance(num.toString());
         utterance.lang = 'it-IT';
-        utterance.rate = 0.;
+        utterance.rate = 0.9; //velocità voce riproduzione numeri
         
         const delay = index * 1500;
 
