@@ -485,9 +485,9 @@ function speakSequence(sequence) {
     sequence.forEach((num, index) => {
         const utterance = new SpeechSynthesisUtterance(num.toString());
         utterance.lang = 'it-IT';
-        utterance.rate = 0.7; //velocità voce riproduzione numeri
+        utterance.rate = 0.8; //velocità voce riproduzione numeri
         
-        const delay = index * 1000; //modifica del 29/05/25
+        const delay = index * 1500; //modifica del 29/05/25
 
         promises.push(new Promise(resolve => {
             utterance.onend = resolve;
@@ -507,7 +507,7 @@ function speakSequence(sequence) {
                 inputSection.classList.remove('hidden');
                 userInput.focus();
             }
-        }, 1500);
+        }, 1000); //velocità esibizione barra inserimento
     });
 }
 
