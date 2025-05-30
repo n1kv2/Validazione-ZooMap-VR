@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test di Idoneità</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+            line-height: 1.6;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #questionContainer, #resultContainer {
+            margin: 30px auto;
+            max-width: 600px;
+        }
+        #resultContainer {
+            font-size: 20px;
+            font-weight: bold;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .not-eligible {
+            color: red;
+            background-color: #ffebee;
+        }
+        .eligible {
+            color: green;
+            background-color: #e8f5e9;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="startContainer">
+        <h1>Test di Idoneità</h1>
+        <button id="startButton">Inizia il test di idoneità</button>
+    </div>
+
+    <div id="questionContainer" class="hidden">
+        <h2 id="questionText"></h2>
+        <button id="yesButton">SI</button>
+        <button id="noButton">NO</button>
+    </div>
+
+    <div id="resultContainer" class="hidden"></div>
+
+    <script>
+        const questions = [
+            "Senti qualche disagio in questo momento?",
+            "Hai avuto episodi di vomito/nausea oggi o negli ultimi due giorni?",
+            "Hai una storia di malessere legato ai mezzi di trasporto (mal d'auto, treno, aereo ecc.)?",
+            "Hai provato vertigini o nausea mentre guardavi un film su grande schermo (cinema o cinema 3D)?",
+            "Hai nausea o vertigini mentre leggi in auto o in un autobus in movimento?",
+            "Preferisci essere l'autista piuttosto che il passeggero a causa di vertigini o nausea?"
+        ];
+
+        let currentQuestion = 0;
+        let yesCount = 0;
+        const startButton = document.getElementById('startButton');
+        const startContainer = document.getElementById('startContainer');
+        const questionContainer = document.getElementById('questionContainer');
+        const questionText = document.getElementById('questionText');
+        const yesButton = document.getElementById('yesButton');
+        const noButton = document.getElementById('noButton');
+        const resultContainer = document.getElementById('resultContainer');
+
+        startButton.addEventListener('click', startTest);
+        yesButton.addEventListener('click', () => answerQuestion(true));
+        noButton.addEventListener('click', () => answerQuestion(false));
+
+        function startTest() {
+            startContainer.classList.add('hidden');
+            questionContainer.classList.remove('hidden');
+            showQuestion();
+        }
+
+        function showQuestion() {
+            questionText.textContent = questions[currentQuestion];
+        }
+
+        function answerQuestion(answer) {
+            if (answer) yesCount++;
+            
+            currentQuestion++;
+            
+            if (currentQuestion < questions.length) {
+                showQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            questionContainer.classList.add('hidden');
+            resultContainer.classList.remove('hidden');
+            
+            if (yesCount >= 4) {
+                resultContainer.textContent = "Non idoneo al test";
+                resultContainer.className = "not-eligible";
+            } else {
+                resultContainer.textContent = "Sei idoneo, continua con i test";
+                resultContainer.className = "eligible";
+            }
+        }
+    </script>
+</body>
+</html>
