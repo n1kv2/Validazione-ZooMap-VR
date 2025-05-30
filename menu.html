@@ -341,7 +341,7 @@
 
             let html = '';
             
-            
+            //Torre di Londra
             if(results.torreLondra) {
                 html += `
                 <div class="result-item">
@@ -349,6 +349,8 @@
                     <p><strong>Tempo decisione:</strong> ${results.torreLondra.totalExec} secondi</p>
                     <p><strong>Tempo esecuzione:</strong> ${results.torreLondra.totalTime} secondi</p>
                     <p><strong>Item completati:</strong> ${results.torreLondra.completedItems}/16</p>
+                    <p><strong>Punteggio totale:</strong> ${results.torreLondra.totalScore}/48</p> 
+                    
                 </div>`;
             }
 
@@ -363,7 +365,7 @@
                 </div>`;
             }
 
-            // Digit Span Test
+            // Digit Span test
             if(results.digitSpan) {
                 html += `
                 <div class="result-item">
