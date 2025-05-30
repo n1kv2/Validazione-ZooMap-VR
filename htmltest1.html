@@ -3,56 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test di Idoneità</title>
+    <title>Test di Idoneità VR</title>
     <style>
+        :root {
+            --primary: #1877f2;
+            --success: #4CAF50;
+            --danger: #f44336;
+            --light-bg: #f8f9fa;
+            --card-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
         body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 50px;
-            line-height: 1.6;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--light-bg);
+            color: #333;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
-        button {
-            padding: 10px 20px;
-            margin: 10px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        #questionContainer, #resultContainer {
-            margin: 30px auto;
+
+        .container {
+            width: 100%;
             max-width: 600px;
+            padding: 2rem;
+            margin: 0 auto;
         }
-        #resultContainer {
-            font-size: 20px;
-            font-weight: bold;
-            padding: 20px;
-            border-radius: 5px;
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--card-shadow);
+            text-align: center;
+            margin-bottom: 1.5rem;
         }
-        .not-eligible {
-            color: red;
-            background-color: #ffebee;
+
+        h1 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
         }
-        .eligible {
-            color: green;
+
+        h2 {
+            color: #444;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+
+        button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            font-weight: 500;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 120px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .result-card {
+            padding: 1.5rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-top: 1rem;
+        }
+
+        .success {
             background-color: #e8f5e9;
+            color: var(--success);
+            border: 2px solid var(--success);
         }
+
+        .danger {
+            background-color: #ffebee;
+            color: var(--danger);
+            border: 2px solid var(--danger);
+        }
+
         .hidden {
             display: none;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .button-group {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+            
+            button {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-    <div id="startContainer">
-        <h1>Test di Idoneità</h1>
-        <button id="startButton">Inizia il test di idoneità</button>
-    </div>
+    <div class="container">
+        <div id="startContainer" class="card">
+            <h1>Motion Sickness Screening</h1>
+            <p>Questo test valuta la tua idoneità all'uso della realtà virtuale</p>
+            <button id="startButton" class="btn-primary">Inizia il test</button>
+        </div>
 
-    <div id="questionContainer" class="hidden">
-        <h2 id="questionText"></h2>
-        <button id="yesButton">SI</button>
-        <button id="noButton">NO</button>
-    </div>
+        <div id="questionContainer" class="card hidden">
+            <h2 id="questionText"></h2>
+            <div class="button-group">
+                <button id="yesButton" class="btn-outline">SI</button>
+                <button id="noButton" class="btn-primary">NO</button>
+            </div>
+        </div>
 
-    <div id="resultContainer" class="hidden"></div>
+        <div id="resultContainer" class="card hidden">
+            <h2>Risultato del test</h2>
+            <div id="resultText" class="result-card"></div>
+            <div id="buttonContainer" class="button-group">
+               
+            </div>
+        </div>
+    </div>
 
     <script>
         const questions = [
@@ -73,6 +172,8 @@
         const yesButton = document.getElementById('yesButton');
         const noButton = document.getElementById('noButton');
         const resultContainer = document.getElementById('resultContainer');
+        const resultText = document.getElementById('resultText');
+        const buttonContainer = document.getElementById('buttonContainer');
 
         startButton.addEventListener('click', startTest);
         yesButton.addEventListener('click', () => answerQuestion(true));
@@ -105,13 +206,50 @@
             resultContainer.classList.remove('hidden');
             
             if (yesCount >= 4) {
-                resultContainer.textContent = "Non idoneo al test";
-                resultContainer.className = "not-eligible";
+                resultText.textContent = "Non idoneo al test VR";
+                resultText.className = "result-card danger";
+                
+                // pulsante per tornare all'index
+                const backButton = document.createElement('button');
+                backButton.className = 'btn-primary';
+                backButton.textContent = 'Torna alla schermata iniziale';
+                backButton.onclick = function() {
+                    localStorage.removeItem('authenticated');
+                    window.location.href = 'index.html';
+                };
+                
+                buttonContainer.innerHTML = '';
+                buttonContainer.appendChild(backButton);
             } else {
-                resultContainer.textContent = "Sei idoneo, continua con i test";
-                resultContainer.className = "eligible";
+                resultText.textContent = "Idoneo, puoi procedere con i test VR";
+                resultText.className = "result-card success";
+                
+                // questo aggiunge il pulsante per tornare al menu
+                const menuButton = document.createElement('button');
+                menuButton.className = 'btn-primary';
+                menuButton.textContent = 'Torna al menu';
+                menuButton.onclick = function() {
+                    window.location.href = 'menu.html';
+                };
+                
+                buttonContainer.innerHTML = '';
+                buttonContainer.appendChild(menuButton);
             }
+            
+            // risultato nel localStorage per essere quindi elaborato 
+            localStorage.setItem('motionScreeningResult', JSON.stringify({
+                eligible: yesCount < 4,
+                yesAnswers: yesCount,
+                date: new Date().toISOString()
+            }));
+            
+            
+            const progress = JSON.parse(localStorage.getItem('testProgress') || '{}');
+            progress.valutazioneVR = true;
+            localStorage.setItem('testProgress', JSON.stringify(progress));
         }
     </script>
 </body>
 </html>
+
+<!--nik-->
