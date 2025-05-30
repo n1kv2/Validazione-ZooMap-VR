@@ -1152,12 +1152,17 @@ function checkSolution() {
 }
 
 function taskCompleted() {
-    stopTimer('exec'); // ferma solo il timer di esecuzione dio boia, se non ti fermi mi incazzo 
+    stopTimer('exec');
     showCompletionMessage();
     
-    // sottrae il tempo precedente)
     const previousTotalTime = state.results.reduce((sum, res) => sum + res.totalTime, 0);
     const taskTotalTime = state.totalTime - previousTotalTime;
+    
+    // Calcola il punteggio in base al numero di tentativi
+    let score = 0;
+    if (state.attempts === 1) score = 3;
+    else if (state.attempts === 2) score = 2;
+    else if (state.attempts === 3) score = 1;
     
     state.results.push({
         task: state.currentTaskIndex + 1,
@@ -1166,7 +1171,8 @@ function taskCompleted() {
         execTime: state.execTime,
         moves: state.moveCount,
         violations: state.violations,
-        completed: true
+        completed: true,
+        score: score
     });
 }
 
@@ -1266,22 +1272,23 @@ function taskCompleted() {
         hideCompletionMessage();
     }
 
-    function showResults() {
-        stopTimers();
-        switchScreen('test', 'results');
-        
-        // Calcola i totali con dei riquadri messi in alto (Guarda il css nel caso) (Già corretti per ogni item)
-        const totalExec = state.results.reduce((sum, res) => sum + res.execTime, 0);
-        const totalTime = state.results.reduce((sum, res) => sum + res.totalTime, 0);
+function showResults() {
+    stopTimers();
+    switchScreen('test', 'results');
     
-const completedItems = state.results.filter(res => res.completed).length;
+    // Calcola i totali
+    const totalExec = state.results.reduce((sum, res) => sum + res.execTime, 0);
+    const totalTime = state.results.reduce((sum, res) => sum + res.totalTime, 0);
+    const totalScore = state.results.reduce((sum, res) => sum + (res.score || 0), 0);
+    const completedItems = state.results.filter(res => res.completed).length;
     
-    // Salva i risultati
+    // Salva i risultati con il punteggio totale
     const results = {
         totalExec: totalExec,
         totalTime: totalTime,
         completedItems: completedItems,
-        totalItems: tasks.length
+        totalItems: tasks.length,
+        totalScore: totalScore // Aggiungiamo il punteggio totale
     };
     localStorage.setItem('torreLondraResults', JSON.stringify(results));
     
@@ -1290,48 +1297,54 @@ const completedItems = state.results.filter(res => res.completed).length;
     progress.torreLondra = true;
     localStorage.setItem('testProgress', JSON.stringify(progress));
 
-        let html = `
-            <h3>Risultati Test</h3>
-            <div class="total-boxes">
-                <div class="total-box">
-                    <h4>Totale tempo decisione</h4>
-                    <div class="total-value">${totalExec}s</div>
-                </div>
-                <div class="total-box">
-                    <h4>Totale tempo esecuzione</h4>
-                    <div class="total-value">${totalTime}s</div>
-                </div>
+    let html = `
+        <h3>Risultati Test</h3>
+        <div class="total-boxes">
+            <div class="total-box">
+                <h4>Totale tempo decisione</h4>
+                <div class="total-value">${totalExec}s</div>
             </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Item</th>
-                        <th>Completato</th>
-                        <th>Tentativi</th>
-                        <th>Tempo item</th>
-                        <th>Tempo decisione</th>
-                        <th>Mosse</th>
-                        <th>Violazioni</th>
-                    </tr>
-                </thead>
-                <tbody>`;
-        
-        state.results.forEach(res => {
-            html += `
+            <div class="total-box">
+                <h4>Totale tempo esecuzione</h4>
+                <div class="total-value">${totalTime}s</div>
+            </div>
+            <div class="total-box">
+                <h4>Punteggio totale</h4>
+                <div class="total-value">${totalScore}/48</div>
+            </div>
+        </div>
+        <table>
+            <thead>
                 <tr>
-                    <td>${res.task}</td>
-                    <td>${res.completed ? 'Sì' : 'No'}</td>
-                    <td>${res.attempts}</td>
-                    <td>${res.totalTime}s</td>
-                    <td>${res.execTime}s</td>
-                    <td>${res.moves}</td>
-                    <td>${res.violations}</td>
-                </tr>`;
-        });
-        
-        html += `</tbody></table>`;
-        elements.containers.results.innerHTML = html;
-    }
+                    <th>Item</th>
+                    <th>Completato</th>
+                    <th>Tentativi</th>
+                    <th>Punti</th>
+                    <th>Tempo item</th>
+                    <th>Tempo decisione</th>
+                    <th>Mosse</th>
+                    <th>Violazioni</th>
+                </tr>
+            </thead>
+            <tbody>`;
+    
+    state.results.forEach(res => {
+        html += `
+            <tr>
+                <td>${res.task}</td>
+                <td>${res.completed ? 'Sì' : 'No'}</td>
+                <td>${res.attempts}</td>
+                <td>${res.score || 0}</td>
+                <td>${res.totalTime}s</td>
+                <td>${res.execTime}s</td>
+                <td>${res.moves}</td>
+                <td>${res.violations}</td>
+            </tr>`;
+    });
+    
+    html += `</tbody></table>`;
+    elements.containers.results.innerHTML = html;
+}
 
     function restartTest() {
         state.currentTaskIndex = 0;
