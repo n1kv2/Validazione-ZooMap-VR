@@ -392,6 +392,7 @@
         if(!localStorage.getItem('testProgress')) {
             const initialProgress = {
                 questionari: false,
+                motionSickness: false,
                 valutazioneVR: false,
                 torreLondra: false,
                 trialMaking: false,
@@ -484,7 +485,7 @@
 
         function updateProgressUI() {
             const progress = JSON.parse(localStorage.getItem('testProgress'));
-            const totalTests = 6;
+            const totalTests = 7;
             let completedTests = 0;
             
             
@@ -509,6 +510,7 @@
             
                 const initialProgress = {
                     questionari: false,
+                    motionSickness: false,
                     valutazioneVR: false,
                     torreLondra: false,
                     trialMaking: false,
@@ -522,6 +524,7 @@
                 localStorage.removeItem('trialMakingResults');
                 localStorage.removeItem('digitSpanResults');
                 localStorage.removeItem('kbit2Results');
+                localStorage.removeItem('motionScreeningResult');
                 
                 
                 updateProgressUI();
