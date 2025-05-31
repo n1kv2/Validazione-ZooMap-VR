@@ -84,7 +84,7 @@
         }
 
         button:hover {
-            transform: translateY(-2px);
+            transform: translateY(-1px);
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
@@ -148,7 +148,7 @@
             <h2>Risultato del test</h2>
             <div id="resultText" class="result-card"></div>
             <div id="buttonContainer" class="button-group">
-               
+                <!-- Il pulsante verrà inserito dinamicamente da JavaScript -->
             </div>
         </div>
     </div>
@@ -209,7 +209,7 @@
                 resultText.textContent = "Non idoneo al test VR";
                 resultText.className = "result-card danger";
                 
-                // pulsante per tornare all'index
+                // Crea il pulsante per tornare all'index
                 const backButton = document.createElement('button');
                 backButton.className = 'btn-primary';
                 backButton.textContent = 'Torna alla schermata iniziale';
@@ -224,7 +224,7 @@
                 resultText.textContent = "Idoneo, puoi procedere con i test VR";
                 resultText.className = "result-card success";
                 
-                // questo aggiunge il pulsante per tornare al menu
+                // Crea il pulsante per tornare al menu
                 const menuButton = document.createElement('button');
                 menuButton.className = 'btn-primary';
                 menuButton.textContent = 'Torna al menu';
@@ -236,20 +236,18 @@
                 buttonContainer.appendChild(menuButton);
             }
             
-            // risultato nel localStorage per essere quindi elaborato 
+            // Salva il risultato nel localStorage
             localStorage.setItem('motionScreeningResult', JSON.stringify({
                 eligible: yesCount < 4,
                 yesAnswers: yesCount,
                 date: new Date().toISOString()
             }));
             
-            
+            // Aggiorna lo stato di completamento nel menu
             const progress = JSON.parse(localStorage.getItem('testProgress') || '{}');
-            progress.valutazioneVR = true;
+            progress.motionSickness = true;
             localStorage.setItem('testProgress', JSON.stringify(progress));
         }
     </script>
 </body>
 </html>
-
-<!--nik-->
