@@ -148,7 +148,7 @@
             <h2>Risultato del test</h2>
             <div id="resultText" class="result-card"></div>
             <div id="buttonContainer" class="button-group">
-                <!-- Il pulsante verrà inserito dinamicamente da JavaScript -->
+                
             </div>
         </div>
     </div>
@@ -209,7 +209,7 @@
                 resultText.textContent = "Non idoneo al test VR";
                 resultText.className = "result-card danger";
                 
-                // Crea il pulsante per tornare all'index
+                // pulsante per tornare all'index
                 const backButton = document.createElement('button');
                 backButton.className = 'btn-primary';
                 backButton.textContent = 'Torna alla schermata iniziale';
@@ -224,7 +224,7 @@
                 resultText.textContent = "Idoneo, puoi procedere con i test VR";
                 resultText.className = "result-card success";
                 
-                // Crea il pulsante per tornare al menu
+                // pulsante per tornare al menu
                 const menuButton = document.createElement('button');
                 menuButton.className = 'btn-primary';
                 menuButton.textContent = 'Torna al menu';
@@ -236,14 +236,14 @@
                 buttonContainer.appendChild(menuButton);
             }
             
-            // Salva il risultato nel localStorage
+            // risultato nel localStorage
             localStorage.setItem('motionScreeningResult', JSON.stringify({
                 eligible: yesCount < 4,
                 yesAnswers: yesCount,
                 date: new Date().toISOString()
             }));
             
-            // Aggiorna lo stato di completamento nel menu
+           
             const progress = JSON.parse(localStorage.getItem('testProgress') || '{}');
             progress.motionSickness = true;
             localStorage.setItem('testProgress', JSON.stringify(progress));
@@ -251,3 +251,5 @@
     </script>
 </body>
 </html>
+
+<!--nik-->
