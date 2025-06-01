@@ -7,11 +7,12 @@
     <style>
         :root {
             --primary: #2c3e50;
-            --secondary: #3498db;
+            --secondary: #1877f2;
             --accent: #e74c3c;
             --success: #2ecc71;
             --background: #f5f6fa;
             --text: #2c3e50;
+            
         }
 
         body {
@@ -26,6 +27,11 @@
             padding: 15px 20px;
             border-radius: 8px;
             margin: 25px 0;
+        }
+
+        .title1 {
+            color: #1877f2;
+            text-align: center;
         }
 
         .screen {
@@ -52,15 +58,10 @@
         }
 
         .btn-complete {
-            background: #17c13f !important;
+            background: var(--secondary) !important;
         }
 
-        .btn-complete:hover {
-            background: #28d350 !important;
-            transform: translateY(-1px);
-            box-shadow: 0 2px 5px #28d350;
-        }
-
+    
         .btn-main, .btn-option {
             flex: 1;
             min-width: 0; 
@@ -96,17 +97,18 @@
         }
 
         .btn-option-ex {
-            background: var(--secondary);
-            color: white;
+            background: #f0f7fd;
+            color: var(--text);
             border: none;
             padding: 10px 20px;
-            border-radius: 20px;
+            border-radius: 30px;
             cursor: pointer;
             transition: background 0.2s;
         }
 
         .btn-option-ex:hover {
-            background: #43a1e0;
+            background: #1877f2;
+            color: #f0f7fd;
         }
 
         #testContainer {
@@ -304,11 +306,11 @@
     <!-- Schermata Home -->
     <div id="home" class="screen">
         <div class="card">
-            <h1>Trail Making Test</h1>
+            <h1 class="title1">Trail Making Test</h1>
             <p>Questo test valuta le funzioni esecutive, vari aspetti dell'attenzione, tracking visuo-motorio e visuo-concettuale.</p>
             
             <div id="lowBody">
-                <h2>Come funziona</h2>
+                <h2 class="title2">Come funziona</h2>
                 <p>Il test è composto da TMT A e TMT B <br> (si consiglia di usare un monitor)</p>
 
                 <p>TMT A</p>
@@ -320,10 +322,15 @@
                 <ul>
                     <li>Attenzione alternata: <br> <b>Unisci alternativamente numeri e lettere. Collega 1 ad A, 2 a B e così via</b> </li>
                 </ul>
-                <div style="text-align: center;"> 
-                    <button class="btn-option-ex" onclick="startTest('SIMPLE')">Test Esempio</button>
-                </div>
+                
             </div>
+
+            <div style="text-align: center;"> 
+                    <p> Prova il TMT esempio e sucessivamente il TMT completo</p>
+
+                    <button class="btn-option-ex" onclick="startTest('SIMPLE')"> TMT ESEMPIO </button>
+                    
+                </div>
             
             <div class="test-options">
                 <button class="btn-option btn-complete" onclick="startCompleteTest()">
@@ -386,8 +393,8 @@
     <!-- Schermata fine test esempio -->
     <div id="example-complete" class="screen hidden">
         <div class="card">
-            <h2>Test Esempio Completato</h2>
-            <p>Hai completato correttamente il test esempio.</p>
+            <h2>TMT Esempio Completato</h2>
+            <p>Hai completato correttamente il TMT esempio.</p>
             <p>Ora puoi procedere con il test completo.</p>
             <div class="result-actions">
                 <button class="btn-main-final" onclick="startCompleteTest()">Inizia TMT Completo</button>
