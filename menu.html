@@ -347,6 +347,16 @@
         <h3>7. KBIT 2</h3>
         <p>Test di intelligenza verbale e non verbale</p>
     </div>
+
+    <div class="test-card" onclick="window.location.href='boston.html'">
+        <h3>8. Boston Test</h3>
+        <p>Test di capacità denominazione</p>
+    </div>
+
+    <div class="test-card" onclick="window.location.href='vuoto.html'">
+        <h3>9. Altro</h3>
+        <p>informazioni generali</p>
+    </div>
 </div>
 
     <div class="signNV" style="font-family: 'Courier New', Courier, monospace;">
@@ -419,7 +429,8 @@
                 torreLondra: JSON.parse(localStorage.getItem('torreLondraResults')) || null,
                 trialMaking: JSON.parse(localStorage.getItem('trialMakingResults')) || null,
                 digitSpan: JSON.parse(localStorage.getItem('digitSpanResults')) || null,
-                kbit2: JSON.parse(localStorage.getItem('kbit2Results')) || null
+                kbit2: JSON.parse(localStorage.getItem('kbit2Results')) || null,
+                bostonTest: JSON.parse(localStorage.getItem('bostonTestResults')) || null
             };
 
             let html = '';
@@ -469,7 +480,16 @@
                 </div>`;
             }
 
-            if(html === '') {
+            if(results.bostonTest) {
+        html += `
+        <div class="result-item">
+            <h3>Boston Test</h3>
+            <p><strong>Risposte corrette:</strong> ${results.bostonTest.correct}/${results.bostonTest.correct + results.bostonTest.wrong}</p>
+            <p><strong>Tempo totale:</strong> ${results.bostonTest.totalTime} secondi</p>
+        </div>`;
+             }
+
+             if(html === '') {
                 html = '<p style="text-align: center; color: #6c757d; margin: 2rem 0;">Nessun risultato disponibile. Completa i test per vedere i risultati.</p>';
             }
 
@@ -485,7 +505,7 @@
 
         function updateProgressUI() {
             const progress = JSON.parse(localStorage.getItem('testProgress'));
-            const totalTests = 7;
+            const totalTests = 8;
             let completedTests = 0;
             
             
@@ -506,31 +526,31 @@
         }
 
         function resetProgress() {
-            if(confirm("Sei sicuro di voler resettare tutti i progressi e i risultati?")) {
-            
-                const initialProgress = {
-                    questionari: false,
-                    motionSickness: false,
-                    valutazioneVR: false,
-                    torreLondra: false,
-                    trialMaking: false,
-                    digitSpan: false,
-                    kbit2: false
-                };
-                localStorage.setItem('testProgress', JSON.stringify(initialProgress));
-                
-                // Resetta i risultati
-                localStorage.removeItem('torreLondraResults');
-                localStorage.removeItem('trialMakingResults');
-                localStorage.removeItem('digitSpanResults');
-                localStorage.removeItem('kbit2Results');
-                localStorage.removeItem('motionScreeningResult');
-                
-                
-                updateProgressUI();
-                alert("Progresso e risultati resettati con successo!");
-            }
-        }
+    if(confirm("Sei sicuro di voler resettare tutti i progressi e i risultati?")) {
+        const initialProgress = {
+            questionari: false,
+            motionSickness: false,
+            valutazioneVR: false,
+            torreLondra: false,
+            trialMaking: false,
+            digitSpan: false,
+            kbit2: false,
+            bostonTest: false
+        };
+        localStorage.setItem('testProgress', JSON.stringify(initialProgress));
+        
+        // Resetta i risultati
+        localStorage.removeItem('torreLondraResults');
+        localStorage.removeItem('trialMakingResults');
+        localStorage.removeItem('digitSpanResults');
+        localStorage.removeItem('kbit2Results');
+        localStorage.removeItem('motionScreeningResult');
+        localStorage.removeItem('bostonTestResults');
+        
+        updateProgressUI();
+        alert("Progresso e risultati resettati con successo!");
+    }
+}
 
         
         window.onclick = function(event) {
