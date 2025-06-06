@@ -508,7 +508,7 @@
     let totalTime = 0;
     let timerInterval;
     let timeoutCheckInterval;
-    let isProcessingAnswer = false; //x prevenire doppi invii
+    let isProcessingAnswer = false;
 
     // Elementi DOM
     const startBtn = document.getElementById('start-btn');
@@ -729,7 +729,7 @@
                 feedbackEl.className = 'feedback incorrect';
                 feedbackEl.style.display = 'block';
                 isProcessingAnswer = false; 
-            } else if (attemptsPerQuestion[questionNum] === 2) {
+            } else {
                
                 hintEl.innerHTML = `
                     <strong>Primo suggerimento:</strong> ${hints[questionNum].first}
@@ -738,34 +738,10 @@
                 `;
                 hintEl.style.display = 'block';
 
-                resultEl.innerHTML = '<i class="fas fa-times-circle"></i> Risposta errata. Ultimo tentativo!';
+                resultEl.innerHTML = '<i class="fas fa-times-circle"></i> Risposta errata. Prova ancora!';
                 feedbackEl.className = 'feedback incorrect';
                 feedbackEl.style.display = 'block';
                 isProcessingAnswer = false; 
-            } else {
-                
-                wrongCount++; 
-                resultEl.innerHTML = `<i class="fas fa-times-circle"></i> Risposta errata. La risposta corretta era: ${correctAnswer}`;
-                feedbackEl.className = 'feedback incorrect';
-                feedbackEl.style.display = 'block';
-                hintEl.style.display = 'none'; 
-
-                // tempo impiegato
-                questionTimes[questionNum - 1] = {
-                    question: questionNum,
-                    time: timeSpent,
-                    correct: false
-                };
-
-               
-                setTimeout(() => {
-                    if (currentQuestion < totalQuestions) {
-                        currentQuestion++;
-                        showQuestion(currentQuestion);
-                    } else {
-                        finishTest();
-                    }
-                }, 1500);
             }
         }
     }
@@ -823,7 +799,13 @@ function finishTest() {
         questionTimes: questionTimes
     };
     localStorage.setItem('bostonTestResults', JSON.stringify(bostonResults));
+updateTestProgress('bostonTest', true);
 
+function updateTestProgress(testName, completed) {
+        let progress = JSON.parse(localStorage.getItem('testProgress')) || {};
+        progress[testName] = completed;
+        localStorage.setItem('testProgress', JSON.stringify(progress));
+    }
     
     questionTimesList.innerHTML = '';
     questionTimes.forEach(q => {
@@ -919,5 +901,3 @@ function saveResultsAndNavigateToMenu() {
     
 </body>
 </html>
-
-<!-- nik -->
