@@ -470,7 +470,7 @@
                 </div>`;
             }
 
-            
+            //kbit
             if(results.kbit2) {
                 html += `
                 <div class="result-item">
@@ -480,14 +480,15 @@
                 </div>`;
             }
 
+            //boston
             if(results.bostonTest) {
-        html += `
-        <div class="result-item">
-            <h3>Boston Test</h3>
-            <p><strong>Risposte corrette:</strong> ${results.bostonTest.correct}/${results.bostonTest.correct + results.bostonTest.wrong}</p>
-            <p><strong>Tempo totale:</strong> ${results.bostonTest.totalTime} secondi</p>
-        </div>`;
-             }
+    html += `
+    <div class="result-item">
+        <h3>Boston Test</h3>
+        <p><strong>Risposte corrette:</strong> ${results.bostonTest.correct} su ${results.bostonTest.correct + results.bostonTest.wrong}</p>
+        <p><strong>Tempo totale:</strong> ${results.bostonTest.totalTime} secondi</p>
+    </div>`;
+}
 
              if(html === '') {
                 html = '<p style="text-align: center; color: #6c757d; margin: 2rem 0;">Nessun risultato disponibile. Completa i test per vedere i risultati.</p>';
