@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guida ai Test Psicologici</title>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #1877f2;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --success: #4cc9f0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: var(--light);
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1, h2, h3 {
+            color: var(--secondary);
+            font-weight: 600;
+            margin: 1.5rem 0 1rem;
+        }
+        
+        h1 {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        h2 {
+            font-size: 1.5rem;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 0.5rem;
+            margin-top: 3rem;
+        }
+        
+        p {
+            margin-bottom: 1rem;
+        }
+        
+        .intro-box {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            text-align: center;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .test-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+        
+     
+        
+        .test-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .test-number {
+            background: var(--primary);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+        
+        .test-title {
+            font-size: 1.3rem;
+            color: var(--secondary);
+        }
+        
+        .test-duration {
+            display: inline-block;
+            background: var(--success);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        
+        .test-content {
+            margin-left: 52px; 
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .info-label {
+            font-weight: 500;
+            color: var(--gray);
+        }
+        
+        ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .note {
+            background: #f8f9fa;
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .flow-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .flow-step {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            position: relative;
+            padding-left: 4rem;
+        }
+        
+        .step-number {
+            position: absolute;
+            left: 1.5rem;
+            top: 1.5rem;
+            background: var(--primary);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .step-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--secondary);
+        }
+        
+        .step-tests {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 0.5rem 0;
+        }
+        
+        .step-test {
+            background: var(--light);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+            
+            .test-content {
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+            
+            .test-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .test-number {
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <h1>Guida ai Test Psicologici</h1>
+    
+    <div class="intro-box">
+        <p>Questa guida spiega in modo semplice i test che svolgerai. Ogni test valuta aspetti diversi delle tue capacità cognitive.</p>
+        <p>Non ci sono risposte giuste o sbagliate, rispondi nel modo che ti viene più naturale!</p>
+    </div>
+    
+    <h2>Sequenza dei Test</h2>
+    
+    <div class="flow-steps">
+        <div class="flow-step">
+            <div class="step-number">1</div>
+            <div class="step-title">Questionari iniziali</div>
+            <div class="step-tests">
+                <span class="step-test">Anamnesi</span>
+                <span class="step-test">Consenso</span>
+                <span class="step-test">Screening VR</span>
+            </div>
+            <p>Raccolta di informazioni di base e verifica dell'idoneità alla realtà virtuale.</p>
+        </div>
+
+         <div class="flow-step">
+            <div class="step-number">2</div>
+            <div class="step-title">Esperienza VR</div>
+            <p>Esperienza con la realtà virtuale nella piattaforma Minecraft.</p>
+        </div>
+        
+        <div class="flow-step">
+            <div class="step-number">3</div>
+            <div class="step-title">Test cognitivi</div>
+            <div class="step-tests">
+                <span class="step-test">Torre di Londra</span>
+                <span class="step-test">Trail Making</span>
+                <span class="step-test">Digit Span</span>
+            </div>
+            <p>Valutano capacità di pianificazione, attenzione e memoria.</p>
+        </div>
+        
+        <div class="flow-step">
+            <div class="step-number">4</div>
+            <div class="step-title">Test linguistici</div>
+            <div class="step-tests">
+                <span class="step-test">KBIT 2</span>
+                <span class="step-test">Boston Test</span>
+            </div>
+            <p>Valutano capacità verbali e di denominazione.</p>
+        </div>
+    </div>
+    
+    <h2>Dettaglio dei Test</h2>
+    
+    <div class="test-card">
+        <div class="test-header">
+            <div class="test-number">1</div>
+            <div>
+                <div class="test-title">Questionari iniziali (esclusa esperienza VR)</div>
+                <div class="test-duration">5-10 minuti</div>
+            </div>
+        </div>
+        <div class="test-content">
+            <div class="info-grid">
+                <div class="info-label">Cosa valuta:</div>
+                <div>Informazioni generali e stato di salute</div>
+                
+                <div class="info-label">Come funziona:</div>
+                <div>Rispondi a domande su te stesso e sulla tua storia medica</div>
+                
+                <div class="info-label">Importante:</div>
+                <div>Tutte le informazioni sono strettamente riservate</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="test-card">
+        <div class="test-header">
+            <div class="test-number">2</div>
+            <div>
+                <div class="test-title">Motion Sickness Screening</div>
+                <div class="test-duration">1 minuto</div>
+            </div>
+        </div>
+        <div class="test-content">
+            <div class="info-grid">
+                <div class="info-label">Cosa valuta:</div>
+                <div>Se puoi usare la realtà virtuale senza problemi</div>
+                
+                <div class="info-label">Come funziona:</div>
+                <div>6 semplici domande con risposta SI/NO</div>
+                
+                <div class="info-label">Esempio:</div>
+                <div>"Hai mai avuto mal d'auto o mal di mare?"</div>
+            </div>
+            
+            <div class="note">
+                Se rispondi SI a 4 o più domande, potremmo evitare la sessione VR per il tuo comfort.
+            </div>
+        </div>
+    </div>
+    
+    <div class="test-card">
+        <div class="test-header">
+            <div class="test-number">3</div>
+            <div>
+                <div class="test-title">Torre di Londra</div>
+                <div class="test-duration">4-6 minuti</div>
+            </div>
+        </div>
+        <div class="test-content">
+            <div class="info-grid">
+                <div class="info-label">Cosa valuta:</div>
+                <div>Capacità di pianificare e risolvere problemi</div>
+                
+                <div class="info-label">Come funziona:</div>
+                <div>Sposta palline colorate tra aste per riprodurre la configurazione mostrata</div>
+                
+                <div class="info-label">Regole:</div>
+                <div>
+                    <ul>
+                        <li>Muovi una pallina alla volta</li>
+                        <li>Asta sinistra: max 3 palline</li>
+                        <li>Asta centrale: max 2 palline</li>
+                        <li>Asta destra: max 1 pallina</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="note">
+                Non c'è fretta! Prenditi il tempo necessario per pianificare le mosse.
+            </div>
+        </div>
+    </div>
+    
+    <div class="test-card">
+        <div class="test-header">
+            <div class="test-number">4</div>
+            <div>
+                <div class="test-title">Trail Making Test</div>
+                <div class="test-duration">2-4 minuti</div>
+            </div>
+        </div>
+        <div class="test-content">
+            <div class="info-grid">
+                <div class="info-label">Cosa valuta:</div>
+                <div>Velocità di pensiero e capacità di passare da un compito all'altro</div>
+                
+                <div class="info-label">Parte A:</div>
+                <div>Unisci i numeri in ordine crescente (1-2-3...)</div>
+                
+                <div class="info-label">Parte B:</div>
+                <div>Alterna numeri e lettere (1-A-2-B-3-C...)</div>
+            </div>
+            
+            <div class="note">
+                Cerca di essere veloce ma preciso. Non preoccuparti degli errori!
+            </div>
+        </div>
+    </div>
+    
+    <div class="test-card">
+        <div class="test-header">
+            <div class="test-number">5</div>
+            <div>
+                <div class="test-title">Digit Span Test</div>
+                <div class="test-duration">2-3 minuti</div>
+            </div>
+        </div>
+        <div class="test-content">
+            <div class="info-grid">
+                <div class="info-label">Cosa valuta:</div>
+                <div>Capacità di ricordare e ripetere sequenze</div>
+                
+                <div class="info-label">Modalità:</div>
+                <div>
+                   Verranno riprodotte alcune sequenze in ordine crescente, <br>
+                   ascolta attentamente e poi scrivi la risposta 
+                </div>
+                
+                <div class="info-label">Esempio:</div>
+                <div>Se senti "3-5-2", allora scrivi "3-5-2" e così via</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="test-card">
+        <div class="test-header">
+            <div class="test-number">6</div>
+            <div>
+                <div class="test-title">KBIT 2</div>
+                <div class="test-duration">3-5 minuti</div>
+            </div>
+        </div>
+        <div class="test-content">
+            <div class="info-grid">
+                <div class="info-label">Cosa valuta:</div>
+                <div>Capacità verbali e di ragionamento</div>
+                
+                <div class="info-label">Come funziona:</div>
+                <div>Rispondi a domande su parole e concetti</div>
+                
+                <div class="info-label">Esempi:</div>
+                <div>
+                    <ul>
+                        <li>"Cos'è quella cosa che ha tasti e si usa per navigare in internet?"  (Risposta: computer)</li>
+                        <li>"Che cosa è rotonda, si calcia e si usa per fare gol?" (Risposta: palla)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="note">
+                Le domande diventano gradualmente più difficili. Rispondi nel modo più preciso possibile.
+            </div>
+        </div>
+    </div>
+    
+    <div class="test-card">
+        <div class="test-header">
+            <div class="test-number">7</div>
+            <div>
+                <div class="test-title">Boston Test</div>
+                <div class="test-duration">3-4 minuti</div>
+            </div>
+        </div>
+        <div class="test-content">
+            <div class="info-grid">
+                <div class="info-label">Cosa valuta:</div>
+                <div>Capacità di nominare oggetti e immagini</div>
+                
+                <div class="info-label">Come funziona:</div>
+                <div>Dire il nome di ciò che vedi nelle immagini</div>
+                
+                <div class="info-label">Aiuti:</div>
+                <div>Se non ricordi il nome, riceverai dei suggerimenti</div>
+            </div>
+            
+            <div class="note">
+                Non preoccuparti se non ricordi qualche termine. È normale che alcuni nomi siano difficili!
+            </div>
+        </div>
+    </div>
+    
+    <h2>Cosa sapere prima di iniziare</h2>
+    
+    <div class="note">
+        <p><strong>Tempi:</strong> La sessione completa dura circa 1-1.5 ore (compresa l'esperienza VR), ma puoi fare pause quando vuoi.</p>
+        <p><strong>Privacy:</strong> Tutti i dati sono anonimi e usati solo per la ricerca.</p>
+        <p><strong>Comfort:</strong> Se ti stanchi o hai disagio, avvisa subito il ricercatore.</p>
+        <p><strong>Nessun test richiede perfezione:</strong> Questi test non sono esami, servono solo a capire come funziona la mente!</p>
+    </div>
+
+    <div style="text-align: center; margin: 40px 0;">
+        <button onclick="window.location.href='menu.html'" 
+                style="background: #2575fc;
+                       color: white;
+                       border: none;
+                       padding: 12px 30px;
+                       border-radius: 30px;
+                       cursor: pointer;
+                       font-weight: 600;
+                       font-size: 1rem;
+                       box-shadow: 0 4px 15px rgba(106, 17, 203, 0.3);
+                       transition: all 0.3s ease;
+                       position: relative;
+                       overflow: hidden;">
+            <span style="position: relative; z-index: 1;">Torna al Menu Principale</span>
+        </button>
+    </div>
+</body>
+</html>
