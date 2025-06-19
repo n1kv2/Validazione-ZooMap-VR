@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digit Span Test</title>
+
+     <style>
+        body {
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+    background-color: #f5f5f5;
+}
+.container {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+button:hover {
+    background-color: #3498db;
+}
+button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+#testSection {
+    margin: 20px 0;
+    padding: 20px;
+    background-color: #e9e9e9;
+    border-radius: 5px;
+    min-height: 100px;
+}
+#inputSection {
+    margin: 20px 0;
+}
+input {
+    padding: 10px;
+    font-size: 16px;
+    width: 200px;
+    margin-right: 10px;
+}
+.hidden {
+    display: none;
+}
+#progress {
+    margin: 20px 0;
+    font-weight: bold;
+}
+#result {
+    font-size: 18px;
+    margin: 20px 0;
+    min-height: 50px;
+}
+.correct {
+    color: green;
+}
+.incorrect {
+    color: red;
+}
+
+#introSection {
+    text-align: left;
+    max-width: 700px;
+    margin: 0 auto 30px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+#introSection h2 {
+    color: #2c3e50;
+    margin-top: 25px;
+    margin-bottom: 15px;
+    font-size: 1.3em;
+    font-weight: 600;
+}
+
+#introSection p {
+    margin-bottom: 12px;
+    line-height: 1.6;
+    color: #444;
+}
+
+#voiceTestSection {
+    background-color: #f0f7fd;
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin: 25px 0;
+    border-left: 4px solid #6c6c6c00;
+}
+
+#voiceTestSection p {
+    margin-bottom: 10px;
+}
+
+#testVoiceBtn {
+    margin: 10px 0;
+}
+
+#voiceTestResult {
+    font-style: italic;
+    color: #3498db;
+    margin-top: 10px;
+}
+
+#startBtn {
+    display: block;
+    margin: 25px auto 0;
+    padding: 12px 30px;
+    font-size: 1.1em;
+}
+
+.info-container {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.info-box {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 15px 25px;
+    min-width: 100px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.info-label {
+    font-size: 0.9em;
+    color: #6c757d;
+    margin-bottom: 6px;
+    font-weight: 500;
+}
+
+.info-value {
+    font-size: 1.4em;
+    color: #2c3e50;
+    font-weight: 700;
+}
+
+#testSection {
+    margin: 20px 0;
+    padding: 25px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2em;
+    color: #495057;
+}
+
+#userInput:disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+#testSection.speaking {
+    animation: pulse 1.5s infinite;
+    border-color: #3498db;
+    transition: all 0.3s ease-out;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(52,152,219,0.4);
+        transform: scale(1);
+    }
+    70% {
+        box-shadow: 0 0 0 12px rgba(52,152,219,0);
+        transform: scale(1.01);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(52,152,219,0);
+        transform: scale(1);
+    }
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(52,152,219,0.3); }
+    70% { box-shadow: 0 0 0 10px rgba(52,152,219,0); }
+    100% { box-shadow: 0 0 0 0 rgba(52,152,219,0); }
+}
+
+@media (max-width: 768px) {
+    .info-container {
+        flex-direction: column;
+        gap: 12px;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .info-box {
+        width: 80%;
+        min-width: auto;
+        padding: 12px 15px;
+        box-sizing: border-box;
+    }
+
+    .info-value {
+        font-size: 1.2em;
+    }
+
+    #testSection {
+        padding: 15px;
+        font-size: 1em;
+        min-height: 100px;
+    }
+
+    input {
+        width: 70%;
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+
+    #inputSection {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    button {
+        padding: 10px 15px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 20px;
+    }
+
+    .info-box {
+        width: 90%;
+    }
+
+    input {
+        width: 90%;
+        font-size: 14px;
+    }
+}
+     </style>
+
+</head>
+<body>
+    <div class="container">
+        <h1>Digit Span Test</h1>
+
+        <div id="introSection">
+
+            <div class="sottotitolo" style="text-align: center;">
+                <p>Questo test valuta la tua memoria a breve termine attraverso la ripetizione di sequenze numeriche.</p>
+            </div>
+
+            <h2>Come funziona</h2>
+            <p>Il test procederà nel seguente modo:</p>
+            <ul>
+                <li>Una voce pronuncerà una sequenza di numeri</li>
+                <li>Dovrai ripetere la sequenza nello stesso ordine</li>
+                <li>Le sequenze iniziano con 3 cifre e aumentano gradualmente</li>
+                <li>Per ogni lunghezza, avrai 2 tentativi</li>
+                <li>Se sbagli entrambi i tentativi, il test termina</li>
+            </ul>
+
+            <div id="voiceTestSection">
+                <h2>Preparazione</h2>
+                <p>Per ottenere risultati accurati:</p>
+                <ul>
+                    <li>Assicurati di essere in un ambiente silenzioso</li>
+                    <li>Regola il volume a un livello confortevole</li>
+                </ul>
+
+                <button id="testVoiceBtn">Prova la voce</button>
+                <p id="voiceTestResult"></p>
+            </div>
+
+            <button id="startBtn" class="hidden">Inizia il test</button>
+        </div>
+
+        <div id="testContainer" class="hidden">
+            <div class="info-container">
+                <div class="info-box">
+                    <div class="info-label">LIVELLO</div>
+                    <div class="info-value" id="currentLevel">1</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-label">LUNGHEZZA</div>
+                    <div class="info-value" id="currentLengthValue">3</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-label">TENTATIVO</div>
+                    <div class="info-value" id="currentAttemptValue">1</div>
+                </div>
+            </div>
+
+            <div id="testSection">
+                <p>Preparati ad ascoltare la sequenza...</p>
+            </div>
+
+            <div id="inputSection" class="hidden">
+                <input type="text" id="userInput" placeholder="Inserisci i numeri" maxlength="12">
+                <button id="submitBtn">Invia</button>
+            </div>
+
+            <div id="result"></div>
+        </div>
+
+        <div id="finalResult" class="hidden">
+            <h3>Risultato finale:</h3>
+            <p id="finalScore"></p>
+            <button id="restartBtn" onclick="window.location.href='menu.html'">Torna al MENU'</button>
+        </div>
+    </div>
+
+    <script>
+        if(!localStorage.getItem('authenticated') && window.location.pathname !== '/index.html') {
+            window.location.href = 'index.html';
+        }
+
+        const config = {
+            minDigits: 3,
+            maxDigits: 9,
+            attemptsPerLength: 2
+        };
+
+        const preRecordedSequences = {
+            test_voice: { audio: 'voce/testvoce.mp3' },
+            3: {
+                1: { audio: 'voce/livello31.mp3', sequence: '582' },
+                2: { audio: 'voce/livello32.mp3', sequence: '694' }
+            },
+            4: {
+                1: { audio: 'voce/livello41.mp3', sequence: '6439' },
+                2: { audio: 'voce/livello42.mp3', sequence: '7286' }
+            },
+            5: {
+                1: { audio: 'voce/livello51.mp3', sequence: '42731' },
+                2: { audio: 'voce/livello52.mp3', sequence: '75836' }
+            },
+            6: {
+                1: { audio: 'voce/livello61.mp3', sequence: '619472' },
+                2: { audio: 'voce/livello62.mp3', sequence: '392487' }
+            },
+            7: {
+                1: { audio: 'voce/livello71.mp3', sequence: '5917428' },
+                2: { audio: 'voce/livello72.mp3', sequence: '4179386' }
+            },
+            8: {
+                1: { audio: 'voce/livello81.mp3', sequence: '58192647' },
+                2: { audio: 'voce/livello82.mp3', sequence: '38295174' }
+            },
+            9: {
+                1: { audio: 'voce/livello91.mp3', sequence: '275862584' },
+                2: { audio: 'voce/livello92.mp3', sequence: '713942568' }
+            }
+        };
+
+
+        function calcolalivello() {
+            return currentLength - config.minDigits + 1;
+        }
+
+        let currentLength = config.minDigits;
+        let currentAttempt = 1;
+        let testActive = false;
+        let currentSequenceData = null;
+        let isSpeaking = false;
+        let voiceTestPassed = false;
+
+        const testVoiceBtn = document.getElementById('testVoiceBtn');
+        const voiceTestResult = document.getElementById('voiceTestResult');
+        const startBtn = document.getElementById('startBtn');
+        const testContainer = document.getElementById('testContainer');
+        const testSection = document.getElementById('testSection');
+        const inputSection = document.getElementById('inputSection');
+        const userInput = document.getElementById('userInput');
+        const submitBtn = document.getElementById('submitBtn');
+        const resultDiv = document.getElementById('result');
+        const finalResultDiv = document.getElementById('finalResult');
+        const finalScoreP = document.getElementById('finalScore');
+        const restartBtn = document.getElementById('restartBtn');
+
+        testVoiceBtn.addEventListener('click', () => {
+            const testAudioPath = preRecordedSequences.test_voice.audio;
+            if (!testAudioPath) {
+                voiceTestResult.textContent = "File audio di prova non trovato! Assicurati che 'voce/testvoce.mp3' esista.";
+                return;
+            }
+
+            const audio = new Audio(testAudioPath);
+            voiceTestResult.textContent = "Riproduzione audio di prova...";
+            startBtn.classList.add('hidden'); 
+
+            audio.onended = () => {
+                voiceTestResult.textContent = "Hai sentito la voce? Se sì, puoi iniziare il test.";
+                startBtn.classList.remove('hidden'); 
+                voiceTestPassed = true;
+            };
+
+            audio.onerror = (e) => {
+                console.error("Errore durante la riproduzione dell'audio di prova:", e);
+                voiceTestResult.textContent = "Errore di riproduzione, se persiste, contatta l'assistenza.";
+                startBtn.classList.remove('hidden'); 
+                voiceTestPassed = false; 
+            };
+            audio.play();
+        });
+
+        startBtn.addEventListener('click', () => {
+            if (!voiceTestPassed) {
+                alert("Per favore, prova prima la voce cliccando su 'Prova la voce'.");
+                return;
+            }
+
+            document.getElementById('introSection').classList.add('hidden');
+            testContainer.classList.remove('hidden');
+            startTest();
+        });
+
+        restartBtn.addEventListener('click', () => {
+            finalResultDiv.classList.add('hidden');
+            testContainer.classList.remove('hidden');
+            currentLength = config.minDigits;
+            currentAttempt = 1;
+            startTest();
+        });
+
+        submitBtn.addEventListener('click', checkAnswer);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') checkAnswer();
+        });
+
+        function startTest() {
+            testActive = true;
+            updateProgress();
+
+            if (!preRecordedSequences[currentLength] || !preRecordedSequences[currentLength][currentAttempt]) {
+                endTest(false);
+                return;
+            }
+            currentSequenceData = preRecordedSequences[currentLength][currentAttempt];
+
+            testSection.innerHTML = "<p>Preparati ...</p>";
+            inputSection.classList.add('hidden');
+            resultDiv.textContent = '';
+
+            setTimeout(() => {
+                speakSequence(currentSequenceData);
+            }, 1000);
+        }
+
+        function speakSequence(sequenceInfo) {
+            testSection.innerHTML = "<p>Ascolta la sequenza...</p>";
+            testSection.classList.add('speaking');
+            isSpeaking = true;
+            userInput.disabled = true;
+
+            const audio = new Audio(sequenceInfo.audio);
+
+            audio.onended = () => {
+                testSection.classList.remove('speaking');
+                setTimeout(() => {
+                    if (testActive) {
+                        isSpeaking = false;
+                        userInput.disabled = false;
+                        testSection.innerHTML = "<p>Inserisci la sequenza che hai sentito</p>";
+                        inputSection.classList.remove('hidden');
+                        userInput.focus();
+                    }
+                }, 1500);
+            };
+
+            audio.onerror = (e) => {
+                console.error("Errore durante la riproduzione dell'audio:", e);
+                resultDiv.innerHTML = `<p class="incorrect">Errore durante la riproduzione dell'audio. Riprova.</p>`;
+                isSpeaking = false;
+                userInput.disabled = false;
+                testSection.innerHTML = "<p>Errore audio. Inserisci la sequenza (se l'hai sentita)</p>";
+                inputSection.classList.remove('hidden');
+                userInput.focus();
+            };
+
+            audio.play();
+        }
+
+        function checkAnswer() {
+            if(isSpeaking) {
+                alert("Attendi la fine della riproduzione prima di inserire i numeri!");
+                return;
+            }
+            const userAnswer = userInput.value.trim();
+            const correctAnswer = currentSequenceData.sequence;
+
+            if (userAnswer === correctAnswer) {
+                resultDiv.innerHTML = `<p class="correct">Corretto! Hai ricordato la sequenza di ${currentLength} cifre.</p>`;
+
+                if (currentLength < config.maxDigits) {
+                    currentLength++;
+                    currentAttempt = 1;
+                    setTimeout(startTest, 1500);
+                } else {
+                    endTest(true);
+                }
+            } else {
+                resultDiv.innerHTML = `<p class="incorrect">Non corretto. La sequenza era: ${correctAnswer}</p>`;
+
+                if (currentAttempt < config.attemptsPerLength) {
+                    currentAttempt++;
+                    setTimeout(startTest, 1500);
+                } else {
+                    endTest(false);
+                }
+            }
+
+            userInput.value = '';
+        }
+
+        function updateProgress() {
+            document.getElementById('currentLevel').textContent = calcolalivello();
+            document.getElementById('currentLengthValue').textContent = currentLength;
+            document.getElementById('currentAttemptValue').textContent = currentAttempt;
+        }
+
+        function endTest(success) {
+            testActive = false;
+            testContainer.classList.add('hidden');
+            finalResultDiv.classList.remove('hidden');
+
+            const score = success ? config.maxDigits : (currentLength - 1);
+            const results = {
+                score: score,
+                maxDigitsReached: success ? config.maxDigits : (currentLength - 1),
+                success: success
+            };
+            localStorage.setItem('digitSpanResults', JSON.stringify(results));
+
+            const progress = JSON.parse(localStorage.getItem('testProgress') || '{}');
+            progress.digitSpan = true;
+            localStorage.setItem('testProgress', JSON.stringify(progress));
+
+            if (success) {
+                finalScoreP.textContent = `Complimenti! Hai completato con successo tutto il test, ricordando ${config.maxDigits} cifre.`;
+            } else {
+                finalScoreP.textContent = `Hai ricordato ${currentLength - 1} cifre.`;
+            }
+        }
+    </script>
+</body>
+</html>
